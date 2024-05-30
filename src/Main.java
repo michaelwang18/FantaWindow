@@ -6,12 +6,7 @@ Main {
     public static void main(String[] args) {
        // ]Utility.iconText(); A NEW ERA A NEW TIME A NEW GAME
         //Utility.Campfire();
-        new MainFrame("FUn fun fun");
-
-
-        //System.out.println("Enter Int");
-        //System.out.println(Utility.tryInput(scan.nextLine(),5));
-
+        MainFrame boop = new MainFrame("Test");
     }
 }
 

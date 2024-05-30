@@ -11,6 +11,8 @@ import java.util.Scanner;
 public class Game extends JPanel implements KeyListener, MouseListener, ActionListener {
     private int battles = 0;
     private BufferedImage background;
+    private BufferedImage bigBG;
+    private skill_Icon testIcon;
     private Character player1;
     private Character player2;
     private Character player3;
@@ -22,12 +24,15 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
 
     public Game(){
         System.out.println("Beginning");
-
+        testIcon = new skill_Icon();
         try { //Process images into "BufferedImage" here
-            background = ImageIO.read(new File("src/background.jpg")); //add temp one
+            background = ImageIO.read(new File("src/Assets/background_layer_2.png")); //add temp one
+            bigBG = new BufferedImage(400,400,background.getType());
+            bigBG.getData();
         } catch (IOException e){
             System.out.println(e.getMessage());
         }
+
         pressedKeys = new boolean[128]; //all keys
         addKeyListener(this);
         addMouseListener(this);
@@ -41,7 +46,9 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.drawImage(background,0,0,null); //Temp rn
+        g.drawImage(background,100,100,null); //Temp rn
+        g.drawImage(testIcon.getCurrentIMG(),100,200,null);
+        g.drawImage(bigBG,0,0,null);
 
 
     }
@@ -282,16 +289,19 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        System.out.println("released");
+        testIcon.changeIcon();
 
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(MouseEvent e) { //try not to use
 
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
+        System.out.println("Mouse Clicked");
 
     }
 }
