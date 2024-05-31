@@ -1,3 +1,7 @@
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Utility {
@@ -71,6 +75,20 @@ public class Utility {
 
 
         return hpBar + Color.RESET;
+    }
+
+    public static BufferedImage[] processAnimFrames(String fileName, int numFrames){ //parsed and adjusted from demo
+        BufferedImage[] returnee = new BufferedImage[numFrames];
+        for (int i = 1; i <= numFrames; i++) {
+            String fill = fileName + i + ".png";
+            try {
+                returnee[i-1] = (ImageIO.read(new File(fill)));
+            }
+            catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return returnee;
     }
 
 

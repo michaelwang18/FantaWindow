@@ -16,6 +16,8 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
     private Character player1;
     private Character player2;
     private Character player3;
+
+    private Player testPlayer;
     private boolean[] pressedKeys;
     private int scaling = 1;
     Scanner scan = new Scanner(System.in);
@@ -25,6 +27,8 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
     public Game(){
         System.out.println("Beginning");
         testIcon = new skill_Icon();
+        BufferedImage[] testPlayerBI = Utility.processAnimFrames("src/fire_knight/idle/idle_",8);
+        testPlayer = new Player("Bob",10,10,testPlayerBI,testPlayerBI); //now port
         try { //Process images into "BufferedImage" here
             background = ImageIO.read(new File("src/Assets/background_layer_2.png")); //add temp one
             bigBG = new BufferedImage(400,400,background.getType());
@@ -48,6 +52,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
         super.paintComponent(g);
         g.drawImage(background,100,100,null); //Temp rn
         g.drawImage(testIcon.getCurrentIMG(),100,200,null);
+        g.drawImage(testPlayer.)
         g.drawImage(bigBG,0,0,null);
 
 
