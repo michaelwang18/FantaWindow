@@ -13,12 +13,16 @@ public class Player {
 
     public Player(String n, int hp, int atk, BufferedImage[] idleFrames, BufferedImage[] atkFrames){
         health = hp; attack = atk;
-        idleAnim = new Animation(idleFrames, 66);
-        atkAnim = new Animation(atkFrames, 66);
+        idleAnim = new Animation(idleFrames, atkFrames, 66);
+
 
     }
 
-    public BufferedImage getFrame
+    public void attackAnimation() { idleAnim.attack();}
+
+    public BufferedImage getFrame(){
+        return idleAnim.getActiveFrame();
+    }
 
 
 

@@ -17,7 +17,9 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
     private Character player2;
     private Character player3;
 
-    private Player testPlayer;
+    private Player testPlayer1;
+    private Player testPlayer2;
+    private Player testPlayer3;
     private boolean[] pressedKeys;
     private int scaling = 1;
     Scanner scan = new Scanner(System.in);
@@ -27,8 +29,11 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
     public Game(){
         System.out.println("Beginning");
         testIcon = new skill_Icon();
-        BufferedImage[] testPlayerBI = Utility.processAnimFrames("src/fire_knight/idle/idle_",8);
-        testPlayer = new Player("Bob",10,10,testPlayerBI,testPlayerBI); //now port
+        BufferedImage[] testPlayerBI = Utility.processAnimFrames("src/Assets/fire_knight/idle/idle_",8);
+        BufferedImage[] testPlayerRun = Utility.processAnimFrames("src/Assets/fire_knight/run/run_",8);
+        testPlayer1 = new Player("Bob",10,10,testPlayerBI,testPlayerRun);
+        testPlayer2 = new Player("Wil",10,10,testPlayerBI,testPlayerRun);
+        testPlayer3 = new Player("Fred",10,10,testPlayerBI,testPlayerRun);//now port
         try { //Process images into "BufferedImage" here
             background = ImageIO.read(new File("src/Assets/background_layer_2.png")); //add temp one
             bigBG = new BufferedImage(400,400,background.getType());
@@ -52,7 +57,9 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
         super.paintComponent(g);
         g.drawImage(background,100,100,null); //Temp rn
         g.drawImage(testIcon.getCurrentIMG(),100,200,null);
-        g.drawImage(testPlayer.)
+        g.drawImage(testPlayer1.getFrame(),100,100,null);
+        g.drawImage(testPlayer2.getFrame(),200,100,null);
+        g.drawImage(testPlayer3.getFrame(),300,100,null);
         g.drawImage(bigBG,0,0,null);
 
 
@@ -274,11 +281,27 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        // see this for all keycodes: https://stackoverflow.com/questions/15313469/java-keyboard-keycodes-list
+        // A = 65, D = 68, S = 83, W = 87, left = 37, up = 38, right = 39, down = 40, space = 32, enter = 10
+        int key = e.getKeyCode();
+        pressedKeys[key] = true;
+        if (pressedKeys[49]){
+            System.out.println("One");
+            testPlayer1.attackAnimation();
+        }
+        if (pressedKeys[50]){
+            System.out.println("One");
+            testPlayer2.attackAnimation();
+        }
+        if (pressedKeys[51]){
+            System.out.println("One");
+            testPlayer3.attackAnimation();
+        }
     }
 
-    @Override
     public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        pressedKeys[key] = false;
 
     }
 
