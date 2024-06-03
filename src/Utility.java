@@ -86,6 +86,7 @@ public class Utility {
             }
             catch (IOException e) {
                 System.out.println(e.getMessage());
+                System.out.println("Util gone wrong");
             }
         }
         return returnee;

@@ -5,19 +5,19 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.module.ModuleFinder;
 import java.util.Scanner;
 
 public class Game extends JPanel implements KeyListener, MouseListener, ActionListener {
     private int battles = 0;
     private BufferedImage background;
     private BufferedImage bigBG;
-    private skill_Icon testIcon;
-    private Character player1;
-    private Character player2;
-    private Character player3;
+    private skill_set testIcon1;
+    private skill_set testIcon2;
+    private skill_set testIcon3;
 
-    private Player testPlayer;
+    private Player testPlayer1;
+    private Player testPlayer2;
+    private Player testPlayer3;
     private boolean[] pressedKeys;
     private int scaling = 1;
     Scanner scan = new Scanner(System.in);
@@ -26,13 +26,16 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
 
     public Game(){
         System.out.println("Beginning");
-        testIcon = new skill_Icon();
-        BufferedImage[] testPlayerBI = Utility.processAnimFrames("src/fire_knight/idle/idle_",8);
-        testPlayer = new Player("Bob",10,10,testPlayerBI,testPlayerBI); //now port
+        testIcon1 = new skill_set();
+        testIcon2 = new skill_set();
+        testIcon3 = new skill_set();
+        BufferedImage[] fireKnightIdle = Utility.processAnimFrames("src/Assets/fire_knight/idle/idle_",8);
+        BufferedImage[] fireKnightRun = Utility.processAnimFrames("src/Assets/fire_knight/run/run_",8);
+        testPlayer1 = new Player("Bob",10,10,fireKnightIdle,fireKnightRun, 200, 185);
+        testPlayer2 = new Player("Wil",10,10,fireKnightIdle,fireKnightRun, 120 , 285);
+        testPlayer3 = new Player("Fred",10,10,fireKnightIdle,fireKnightRun, 200, 385);//now port
         try { //Process images into "BufferedImage" here
-            background = ImageIO.read(new File("src/Assets/background_layer_2.png")); //add temp one
-            bigBG = new BufferedImage(400,400,background.getType());
-            bigBG.getData();
+            background = ImageIO.read(new File("src/Assets/grass_Background.png")); //add temp one
         } catch (IOException e){
             System.out.println(e.getMessage());
         }
@@ -50,15 +53,22 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.drawImage(background,100,100,null); //Temp rn
-        g.drawImage(testIcon.getCurrentIMG(),100,200,null);
-        g.drawImage(testPlayer.)
+        g.drawImage(background,0,-20,null); //Temp rn
+        g.drawImage(testIcon1.getCurrentIMG(), testPlayer1.getX(), testPlayer1.getY(), null);
+        g.drawImage(testPlayer1.getFrame(),testPlayer1.getX(), testPlayer1.getY(), null);
+
+        g.drawImage(testIcon2.getCurrentIMG(), testPlayer2.getX(), testPlayer2.getY(), null);
+        g.drawImage(testPlayer2.getFrame(),testPlayer2.getX(), testPlayer2.getY(), null);
+
+        g.drawImage(testIcon3.getCurrentIMG(), testPlayer3.getX(), testPlayer3.getY(), null);
+        g.drawImage(testPlayer3.getFrame(),testPlayer3.getX(), testPlayer3.getY(), null);
         g.drawImage(bigBG,0,0,null);
 
 
     }
     public void start(){
         //start throwing in things
+
 
 
 
@@ -116,150 +126,10 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
 
 
 
-
-
-
-
-
-        System.out.println("Your starting team is: ");
-        //lo
-        player1 = genPlayer();
-        player2 = genPlayer();
-        player3 = genPlayer();
-        while (player1.getName().equals(player2.getName())){
-            player2 = genPlayer();
-        }
-
-        while (player3.getName().equals(player2.getName()) || player3.getName().equals(player1.getName()) ){
-            player3 = genPlayer();
-        }
-        startInfo();
-        System.out.println("Press Enter To Start Your First Battle!\n");
-
-
-
-        for (double i = 1; battles < 5 ;i += .125){ //"gameplay" loop
-            Battle battle =  new Battle(player1,player2,player3,genStoryEnemy(i),genStoryEnemy(i),genStoryEnemy(i));
-            if (battle.start()){
-                battles++;
-                System.out.println( "\n\n" + Utility.color(5 - battles + Utility.plural(" Battle",5 - battles), Color.WHITE_BOLD_BRIGHT) + " Away From Final Boss- Prepare Carefully! \n");
-                System.out.println(Utility.color("CURRENT STATUS",Color.WHITE_BOLD_BRIGHT));
-                afterBattle();
-
-                System.out.println(Utility.color("Press enter to start next battle!",Color.WHITE_BOLD_BRIGHT));
-                scan.nextLine();
-
-            } else {
-                failure();
-            }
-        }
-        if (!fail) {
-            Battle battle = new Battle(player1, player2, player3, Entity.hydraHead(1), Entity.hydraHead(1), Entity.hydraHead(1));
-            if(battle.start()){
-                System.out.println(Utility.color("CONGRATS, You Beat The Hydra!",Color.YELLOW_BOLD_BRIGHT));
-                System.out.print("Would You Like to keep going? \n(1) Yes \n(2) No");
-                if (Utility.tryInput(scan.nextLine(),2) == 2){
-                    System.out.println("Thanks For Playing!");
-                } else {
-                    InfiniteMode();
-                }
-            } else {
-                failure();
-            }
-        }
-
     }
 
 
-    private void InfiniteMode(){
-        System.out.println("You Will Be Entered Infinite Mode!\nGo As Far As You Can! (There is a Hydra every 10 fights BTW)");
-        boolean lose = false;
-        double infScale = 2;
-        double infScaling = .10;
-        Scenario.upgrade(player1);
-        Scenario.upgrade(player2);
-        Scenario.upgrade(player3);
-        while (!lose){
-            Battle inf =  new Battle(player1,player2,player3,genEnemy(infScale),genEnemy(infScale),genEnemy(infScale));
-            if (inf.start()){
-                battles++;
-                infScale += infScaling;
-                System.out.println( "\n\n" + Utility.color(battles + Utility.plural(" Battle",battles), Color.WHITE_BOLD_BRIGHT) + " Total, Keep it up!");
-                System.out.println( Utility.color(battles + " Battles", Color.WHITE_BOLD_BRIGHT));
-                System.out.println(Utility.color("\n\nCURRENT STATUS",Color.WHITE_BOLD_BRIGHT));
-                afterBattle();
 
-                System.out.println(Utility.color("Press enter to start next battle!",Color.WHITE_BOLD_BRIGHT));
-                scan.nextLine();
-
-                if (battles % 5 == 0){
-                    Battle hydra = new Battle(player1,player2,player3,Entity.hydraHead(infScale),Entity.hydraHead(infScale),Entity.hydraHead(infScale));
-                    if (hydra.start()){
-                        afterBattle();
-                        infScaling += .10;
-                        System.out.println(Utility.color("Press enter to start next battle!",Color.WHITE_BOLD_BRIGHT));
-                        scan.nextLine();
-                    } else{failure();}
-                }
-
-
-            } else {
-                System.out.println(" \n\n You Lose, Bye Bye! \nYou Survived: " + Utility.color(battles + Utility.plural(" Battle",battles), Color.WHITE_BOLD_BRIGHT));
-                lose = true;
-            }
-        }
-    }
-
-    public Character genEnemy(double scaling){
-        return Entity.allEnemies(scaling)[(int) (Math.random()*32)];
-    }
-    public Character genStoryEnemy(double scaling){
-        return Entity.storyEnemy(scaling)[(int) (Math.random()*10)];
-    }
-    public Character genPlayer(){
-        return Entity.startingChar(1)[(int) (Math.random()*3)];
-    }
-
-
-    private void failure(){
-        System.out.println(" \n\n You Lose, Bye Bye!");
-        fail = true;
-        System.out.println("Try Again? \n(1) Yes \n(2) No");
-        if (Utility.tryInput(scan.nextLine(),2) == 1){
-            fail = false;
-            battles = 0;
-            start();
-        } else {
-            System.out.println("See You Next Time!\n\n\n\n          On Dragon Ball Z");
-        }
-    }
-
-    private void printInfo(){
-        System.out.println(player1.info() + "\n" + Utility.healthBar(player1.getHP(),player1.getMaxHealth()) + "\n" + player2.info() + "\n" + Utility.healthBar(player2.getHP(),player2.getMaxHealth()) + "\n" + player3.info() + "\n" + Utility.healthBar(player3.getHP(),player3.getMaxHealth()) + "\n" +"\n");
-    }
-
-    private void afterBattle(){
-        printInfo();
-        Scenario.event(player1,player2,player3);
-        printInfo();
-        Scenario.afterBattle(player1,player2,player3);
-        printInfo();
-
-    }
-
-
-    public void startInfo(){
-        System.out.println();
-        System.out.println(player1.info());
-        player1.printSkillInfo();
-        System.out.println();
-        System.out.println(player2.info()); // GENERATES PLAYER TEAM
-        player2.printSkillInfo();
-        System.out.println();
-        System.out.println(player3.info());
-        player3.printSkillInfo();
-        System.out.println("\n PRESS TO BEGIN YOUR JOURNEY");
-    }
 
 
     @Override
@@ -274,11 +144,30 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        // see this for all keycodes: https://stackoverflow.com/questions/15313469/java-keyboard-keycodes-list
+        // A = 65, D = 68, S = 83, W = 87, left = 37, up = 38, right = 39, down = 40, space = 32, enter = 10
+        int key = e.getKeyCode();
+        pressedKeys[key] = true;
+        if (pressedKeys[49]){
+            System.out.println("One");
+            testPlayer1.attackAnimation();
+            testIcon1.changeIcon();
+        }
+        if (pressedKeys[50]){
+            System.out.println("One");
+            testPlayer2.attackAnimation();
+            testIcon2.changeIcon();
+        }
+        if (pressedKeys[51]){
+            System.out.println("One");
+            testPlayer3.attackAnimation();
+            testIcon3.changeIcon();
+        }
     }
 
-    @Override
     public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        pressedKeys[key] = false;
 
     }
 
@@ -295,7 +184,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
     @Override
     public void mouseReleased(MouseEvent e) {
         System.out.println("released");
-        testIcon.changeIcon();
+        //testIcon.changeIcon();
 
     }
 

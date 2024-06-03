@@ -8,17 +8,29 @@ public class Player {
     private Animation idleAnim;
     private Animation atkAnim;
 
+    private int x;
+    private int y;
 
 
 
-    public Player(String n, int hp, int atk, BufferedImage[] idleFrames, BufferedImage[] atkFrames){
+
+    public Player(String n, int hp, int atk, BufferedImage[] idleFrames, BufferedImage[] atkFrames, int x, int y){
         health = hp; attack = atk;
-        idleAnim = new Animation(idleFrames, 66);
-        atkAnim = new Animation(atkFrames, 66);
+        this.x = x;
+        this.y = y;
+        idleAnim = new Animation(idleFrames, atkFrames, 66);
+
 
     }
 
-    public BufferedImage getFrame
+    public int getX() {return x;}
+    public int getY() {return y;}
+
+    public void attackAnimation() { idleAnim.attack();}
+
+    public BufferedImage getFrame(){
+        return idleAnim.getActiveFrame();
+    }
 
 
 

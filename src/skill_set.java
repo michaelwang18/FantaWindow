@@ -1,9 +1,8 @@
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-public class skill_Icon {
+public class skill_set {
 
     private int current;
     private BufferedImage currentIMG;
@@ -12,11 +11,11 @@ public class skill_Icon {
     private BufferedImage heavy;
 
 
-    public skill_Icon(){
+    public skill_set(){
         try {
-          this.basic = ImageIO.read(new File("src/Assets/background_layer_2.png"));
-          this.heavy = ImageIO.read(new File("src/Assets/shield.png"));
-          this.block = ImageIO.read(new File("src/Assets/sword.png"));
+          this.basic = ImageIO.read(new File("src/Assets/skill_icons/block.png"));
+          this.heavy = ImageIO.read(new File("src/Assets/skill_icons/sword_strike.png"));
+          this.block = ImageIO.read(new File("src/Assets/skill_icons/sword_sweep.png"));
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
