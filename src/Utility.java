@@ -93,6 +93,19 @@ public class Utility {
     }
 
 
+    public static BufferedImage processImage(String fileName){
+        BufferedImage returnee = null;
+        try {
+             returnee = (ImageIO.read(new File(fileName)));
+            System.out.println("gyf");
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+            System.out.println("process Image method failed");
+        }
+        return returnee;
+    }
+
+
 
 
     public static void Campfire(){
