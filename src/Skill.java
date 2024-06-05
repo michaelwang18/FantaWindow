@@ -22,6 +22,7 @@ public class Skill {
         this.detail = detail;
         this.coinCount = coinCount;
         this.coinPower =coinPower;
+        aoe = AOE;
         damageMultiplier = dmgMult;
         this.icon = icon;
     }
@@ -45,6 +46,18 @@ public class Skill {
 
     public BufferedImage getIcon() {
         return icon;
+    }
+
+     public void changeTargets(){
+        if (target < 2){
+            target++;
+        } else {
+            target = 0;
+        }
+     }
+
+    public int getTarget() {
+        return target;
     }
 
     public double getDamageMultiplier() {

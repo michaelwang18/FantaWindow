@@ -67,6 +67,10 @@ public class Player {
         this.blocking = blocking;
     }
 
+    public boolean isBlocking() {
+        return blocking;
+    }
+
     public void setBlockStack(int blockStack) {
         this.blockStack = blockStack;
     }
@@ -77,6 +81,9 @@ public class Player {
 
     public void changeSkill(){
         skillSet.changeSkill();
+        if (this.getCurrentSkill().getDamageMultiplier() == 0){
+            blocking = true;
+        }
     }
 
 

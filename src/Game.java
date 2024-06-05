@@ -24,6 +24,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
     private Enemy testEnemy2;
     private Enemy testEnemy3;
     private Player currentPlayer;
+    private Skill currentSkill;
     private Enemy[] enemyTeam;
     private Player[] playerTeam;
 
@@ -47,9 +48,10 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
             Skill s2 = new Skill("Sword Sweep", "Aoe Skill", 1, 2, .5, true, s2c);
 
             Skill s3 = new Skill("Block", "Protec", 0, 2, 0, false, s3c);
-            testIcon1 = new Skill_Set(s1,s2,s3);
-            testIcon2 = new Skill_Set(s1,s2,s3);
-            testIcon3 = new Skill_Set(s1,s2,s3);
+//
+            testIcon1 = new Skill_Set(new Skill("Sword Strike", "Quick Strike", 1, 2, .5, false, s1c),new Skill("Sword Sweep", "Aoe Skill", 1, 2, .5, true, s2c),new Skill("Block", "Protec", 0, 2, 0, false, s3c));
+            testIcon2 = new Skill_Set(new Skill("Sword Strike", "Quick Strike", 1, 2, .5, false, s1c),new Skill("Sword Sweep", "Aoe Skill", 1, 2, .5, true, s2c),new Skill("Block", "Protec", 0, 2, 0, false, s3c));
+            testIcon3 = new Skill_Set(new Skill("Sword Strike", "Quick Strike", 1, 2, .5, false, s1c),new Skill("Sword Sweep", "Aoe Skill", 1, 2, .5, true, s2c),new Skill("Block", "Protec", 0, 2, 0, false, s3c));
 
         } catch (IOException e){
             System.out.println(e.getMessage());
@@ -108,10 +110,21 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
         g.drawImage(testEnemy1.getFrame(),testEnemy1.getX(),testEnemy1.getY(),null);
         g.drawImage(testEnemy2.getFrame(),testEnemy2.getX(),testEnemy2.getY(),null);
         g.drawImage(testEnemy3.getFrame(),testEnemy3.getX(),testEnemy3.getY(),null);
+
+        if (currentPlayer.getCurrentSkill().isAoe()){
+            for (Enemy player: enemyTeam){ g.drawImage(crosshair,player.getX(),player.getY(),null);}}
+
+        else { Player target = enemyTeam[currentPlayer.getCurrentSkill().getTarget()];
+            g.drawImage(crosshair,target.getX(), target.getY(), null);
+
+            }
+
+
         for (Player player: playerTeam){
             g.setColor(Color.RED);
             g.setFont(new Font("Courier New", Font.BOLD, 15));
             g.drawString(player.getCurrentHealth() + "/" + player.getHealth(), player.getX(), player.getY()+75);
+
         }
         for (Enemy player: enemyTeam){
             g.setColor(Color.RED);
@@ -120,7 +133,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
         }
 
 
-        g.setColor(Color.BLACK);
+        g.setColor(Color.BLUE);
         g.setFont(new Font("Courier New", Font.BOLD, 18));
         g.drawString(currentPlayer.getName(), currentPlayer.getX()-30, currentPlayer.getY()+10);
 
@@ -219,7 +232,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
                 currentPlayer = testPlayer1;
             } else {
                 testPlayer1.attackAnimation();
-                testIcon1.changeSkill();
+                testPlayer1.changeSkill();
             }
         }
         if (pressedKeys[50]){
@@ -228,7 +241,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
                 currentPlayer = testPlayer2;
             } else {
                 testPlayer2.attackAnimation();
-                testIcon2.changeSkill();
+                testPlayer2.changeSkill();
                 }
             }
         if (pressedKeys[51]){
@@ -237,8 +250,15 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
                 currentPlayer = testPlayer3;
             } else {
                 testPlayer3.attackAnimation();
-                testIcon3.changeSkill();
+                testPlayer3.changeSkill();
+                System.out.println(currentPlayer.getCurrentSkill().getName());
             }
+        }
+        if (pressedKeys[32]){
+            System.out.println("Bop");
+            currentPlayer.getCurrentSkill().changeTargets();
+
+
         }
     }
 
