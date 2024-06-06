@@ -16,39 +16,6 @@ public class Skill_Set {
     private Skill currentSkill;
 
 
-    public Skill_Set(){ //default
-        try {
-          this.basic = ImageIO.read(new File("src/Assets/skill_icons/block.png"));
-          this.heavy = ImageIO.read(new File("src/Assets/skill_icons/sword_strike.png"));
-          this.block = ImageIO.read(new File("src/Assets/skill_icons/sword_sweep.png"));
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        currentIMG = this.block;
-        current = 0;
-
-
-    }
-
-    public Skill_Set(boolean test){ //default
-        try {
-            this.basic = ImageIO.read(new File("src/Assets/skill_icons/block.png"));
-            this.heavy = ImageIO.read(new File("src/Assets/skill_icons/sword_strike.png"));
-            this.block = ImageIO.read(new File("src/Assets/skill_icons/sword_sweep.png"));
-            Skill s1 = new Skill("Sword Strike", "Quick Strike", 1, 2, .5, false, basic);
-            Skill s2 = new Skill("Sword Sweep", "Aoe Skill", 1, 2, .5, true, heavy);
-            Skill s3 = new Skill("Block", "Protec", 0, 2, 0, false, block);
-
-
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        currentIMG = this.block;
-        current = 0;
-
-
-    }
-
     public Skill_Set(Skill s1, Skill s2, Skill s3){
         try {
 //            this.basic = ImageIO.read(new File("src/Assets/skill_icons/block.png"));
@@ -78,11 +45,11 @@ public class Skill_Set {
 
     public void changeSkill(){
         if (current == 0 ){
-            current = 1; currentIMG = basic;}
+            current = 1; currentIMG = basic; currentSkill = skill1;}
         else if (current == 1 ){
-            current = 2; currentIMG = heavy; }
+            current = 2; currentIMG = heavy;  currentSkill = skill2;}
         else if (current == 2 ){
-            current = 0; currentIMG = block; }
+            current = 0; currentIMG = block;  currentSkill = skill3;}
 
         System.out.println("Change icon");
         System.out.println(current);

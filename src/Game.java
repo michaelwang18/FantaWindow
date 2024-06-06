@@ -112,7 +112,12 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
         g.drawImage(testEnemy3.getFrame(),testEnemy3.getX(),testEnemy3.getY(),null);
 
         if (currentPlayer.getCurrentSkill().isAoe()){
-            for (Enemy player: enemyTeam){ g.drawImage(crosshair,player.getX(),player.getY(),null);}}
+            for (Enemy player: enemyTeam){
+                g.drawImage(crosshair,player.getX(),player.getY(),null);
+                System.out.println("ho");
+            }
+
+        }
 
         else { Player target = enemyTeam[currentPlayer.getCurrentSkill().getTarget()];
             g.drawImage(crosshair,target.getX(), target.getY(), null);
@@ -136,6 +141,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
         g.setColor(Color.BLUE);
         g.setFont(new Font("Courier New", Font.BOLD, 18));
         g.drawString(currentPlayer.getName(), currentPlayer.getX()-30, currentPlayer.getY()+10);
+        g.drawString(currentPlayer.getCurrentSkill().getName(), currentPlayer.getX()-30, currentPlayer.getY()+20);
 
 
 
