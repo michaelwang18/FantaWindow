@@ -49,9 +49,9 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
             BufferedImage s2c = ImageIO.read(new File("src/Assets/skill_icons/sword_sweep.png"));
             BufferedImage s3c = ImageIO.read(new File("src/Assets/skill_icons/block.png"));
             crosshair =  ImageIO.read(new File("src/Assets/skill_icons/crosshair.png"));
-            testIcon1 = new Skill_Set(new Skill("Sword Strike", "Quick Strike", 2, 2, .5, false, s1c),new Skill("Sword Sweep", "Aoe Skill", 1, 2, .5, true, s2c),new Skill("Block", "Protec", 0, 2, 0, false, s3c));
-            testIcon2 = new Skill_Set(new Skill("Arrow Shot", "Shoots 1 target", 2, 2, .5, false, s1c),new Skill("Arrow Volley", "Aoe Skill", 1, 2, .5, true, s2c),new Skill("Block", "Protec", 0, 2, 0, false, s3c));
-            testIcon3 = new Skill_Set(new Skill("Sword Strike", "Quick Strike",2, 2, .5, false, s1c),new Skill("Sword Sweep", "Aoe Skill", 1, 2, .5, true, s2c),new Skill("Block", "Protec", 0, 2, 0, false, s3c));
+            testIcon1 = new Skill_Set(new Skill("Sword Strike", "Quick Strike", 2, false, s1c),new Skill("Sword Sweep", "Aoe Skill", .5, true, s2c),new Skill("Block", "Protec", 0, false, s3c));
+            testIcon2 = new Skill_Set(new Skill("Arrow Shot", "Shoots 1 target", 2,  false, s1c),new Skill("Arrow Volley", "Aoe Skill", 1,  true, s2c),new Skill("Block", "Protec", 0,  false, s3c));
+            testIcon3 = new Skill_Set(new Skill("Sword Strike", "Quick Strike",2,  false, s1c),new Skill("Sword Sweep", "Aoe Skill", 1, true, s2c),new Skill("Block", "Protec", 0, false, s3c));
 
         } catch (IOException e){
             System.out.println(e.getMessage());
@@ -280,21 +280,29 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
         if (pressedKeys[10]){
             System.out.println("Enter");
             for (Player player: playerTeam){
-                if (player.isAlive()) {
+                if (playerTeam[0].isAlive()) {
                     Skill c = player.getCurrentSkill();
                     JFrame frame = new JFrame("Welcome");
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    frame.setSize(300, 200);
-                    frame.setLocationRelativeTo(null); // auto-centers frame in screen
-                    WelcomePanel panel = new WelcomePanel(frame);
-                    frame.add(panel);
-                    frame.setVisible(true);
+                    frame.setSize(900, 600);
+                    frame.setLocationRelativeTo(null);
+                    // auto-centers frame in screen
                     if (c.isAoe()) {
+                        WelcomePanel panel = new WelcomePanel(frame, player, enemyTeam);
+                        frame.add(panel);
+                        frame.setVisible(true);
+                        while(frame.isVisible()){
+                            System.out.println("e");
+                        }
                         for (Enemy enemy : enemyTeam) {
                             enemy.takeDamage(player.getAttack());
                         }
                     } else {
                         Player target = enemyTeam[c.getTarget()];
+                        WelcomePanel panel = new WelcomePanel(frame, player, target);
+                        frame.add(panel);
+                        frame.setVisible(true);
+
                         target.takeDamage(player.getAttack());
 
                     }
