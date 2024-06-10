@@ -14,12 +14,45 @@ public class WelcomePanel extends JPanel implements ActionListener {
     private JButton submitButton;
     private JButton clearButton;
     private JFrame enclosingFrame;
+
+    private BufferedImage background;
     private BufferedImage goomba;
 
-    public WelcomePanel(JFrame frame) {
+    private Player attacker;
+    private Player victim;
+
+    private Player[] victims;
+    private Timer timer;
+
+    public WelcomePanel(JFrame frame, Player attack, Player victim) {
+        attacker = attack;
+        timer = new Timer(10, this);
+        timer.start();
+        this.victim = victim;
         enclosingFrame = frame;
         try {
-            goomba = ImageIO.read(new File("src/goomba.png"));
+            goomba = ImageIO.read(new File("src/Assets/skill_icons/Crosshair.png"));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+
+        textField = new JTextField(10);
+        submitButton = new JButton("Submit");
+        clearButton = new JButton("Clear");
+        add(textField);  // textField doesn't need a listener since nothing needs to happen when we type in text
+        add(submitButton);
+        add(clearButton);
+        submitButton.addActionListener(this);
+        clearButton.addActionListener(this);
+    }
+
+    public WelcomePanel(JFrame frame, Player attack, Player[] victims) {
+        attacker = attack;
+        this.victims = victims;
+        enclosingFrame = frame;
+        try {
+            goomba = ImageIO.read(new File("src/Assets/skill_icons/Crosshair.png"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -33,13 +66,28 @@ public class WelcomePanel extends JPanel implements ActionListener {
         clearButton.addActionListener(this);
     }
 
+
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setFont(new Font("Arial", Font.BOLD, 16));
         g.setColor(Color.RED);
-        g.drawString("Please enter your name:", 50, 30);
-        g.drawImage(goomba, 200, 50, null);
+        g.drawString(attacker.getCurrentSkill().getName(), 50, 30);
+        g.drawImage(attacker.getFrame(),300,300,null);
+        if (victim != null){
+            g.drawImage(victim.getFrame(),350,300,null);
+        } else {
+            for (Player p: victims){
+                g.drawImage(p.getFrame(),p.getX(),p.getY(),null);
+            }
+        }
+
+
+        System.out.println("test");
+
+
+        g.drawImage(goomba, 200, 100, null);
 
         textField.setLocation(50, 50);
         submitButton.setLocation(50, 100);
@@ -48,13 +96,8 @@ public class WelcomePanel extends JPanel implements ActionListener {
 
     // ACTIONLISTENER INTERFACE METHODS
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() instanceof JButton) {
-            JButton button = (JButton) e.getSource();
-            if (button == submitButton) {
-                enclosingFrame.dispose();
-            } else {
-                textField.setText("");
-            }
+        if (e.getSource() instanceof Timer) {
+            repaint();
         }
     }
 }

@@ -6,8 +6,7 @@ public class Skill {
     private double damageMultiplier;
     private boolean aoe;
 
-    private double coinPower;
-    private int coinCount;
+
 
 
 
@@ -17,21 +16,19 @@ public class Skill {
     private String name;
     private String detail;
 
-    public Skill(String name, String detail, double dmgMult, int coinCount, double coinPower, boolean AOE, BufferedImage icon){
+    public Skill(String name, String detail, double dmgMult, boolean AOE, BufferedImage icon){
         this.name = name;
         this.detail = detail;
-        this.coinCount = coinCount;
-        this.coinPower =coinPower;
+
         aoe = AOE;
         damageMultiplier = dmgMult;
         this.icon = icon;
     }
 
-    public Skill(String name, double dmgMult, int coinCount, int coinPower, BufferedImage icon){
+    public Skill(String name, double dmgMult, BufferedImage icon){
         this.name = name;
         this.detail = "Description not given yet LOSER!!!";
-        this.coinCount = coinCount;
-        this.coinPower =coinPower;
+
         damageMultiplier = dmgMult;
         this.icon = icon;
     }
