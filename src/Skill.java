@@ -56,6 +56,10 @@ public class Skill {
         }
      }
 
+    public void setTarget(int target) {
+        this.target = target;
+    }
+
     public int getTarget() {
         return target;
     }

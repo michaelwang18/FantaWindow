@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Player {
@@ -39,13 +40,14 @@ public class Player {
         this.x = x;
         this.y = y;
         idleAnim = new Animation(idleFrames, atkFrames, delay);
+        alive = true;
     }
 
 
 
     public void takeDamage(int dmg){
         currentHealth -= dmg;
-        if (currentHealth >= 0){
+        if (currentHealth <= 0){
             currentHealth = 0;
             alive = false;
         }
@@ -94,9 +96,25 @@ public class Player {
 
     public void attackAnimation() { idleAnim.attack();}
 
+    public int getAttack() {
+        return attack;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
     public BufferedImage getFrame(){
         return idleAnim.getActiveFrame();
     }
+
+    public Rectangle rect() {
+        int imgWidth = getFrame().getWidth();
+        int imgHeight = getFrame().getHeight();
+        Rectangle rect = new Rectangle(x, y, imgWidth+25, imgHeight+15);
+        return rect;
+    }
+
 
 
 
