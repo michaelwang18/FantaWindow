@@ -8,7 +8,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class WelcomePanel extends JPanel implements ActionListener {
+
+public class ActionPanel extends JPanel implements ActionListener {
 
     private JTextField textField;
     private JButton submitButton;
@@ -24,7 +25,7 @@ public class WelcomePanel extends JPanel implements ActionListener {
     private Player[] victims;
     private Timer timer;
 
-    public WelcomePanel(JFrame frame, Player attack, Player victim) {
+    public ActionPanel(JFrame frame, Player attack, Player victim) {
         attacker = attack;
         timer = new Timer(10, this);
         timer.start();
@@ -32,38 +33,31 @@ public class WelcomePanel extends JPanel implements ActionListener {
         enclosingFrame = frame;
         try {
             goomba = ImageIO.read(new File("src/Assets/skill_icons/Crosshair.png"));
+            background = ImageIO.read(new File("src/Assets/action_background.jpg"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
 
-
-        textField = new JTextField(10);
-        submitButton = new JButton("Submit");
-        clearButton = new JButton("Clear");
-        add(textField);  // textField doesn't need a listener since nothing needs to happen when we type in text
+        submitButton = new JButton("Next");
         add(submitButton);
-        add(clearButton);
         submitButton.addActionListener(this);
-        clearButton.addActionListener(this);
     }
 
-    public WelcomePanel(JFrame frame, Player attack, Player[] victims) {
+    public ActionPanel(JFrame frame, Player attack, Player[] victims) {
         attacker = attack;
+        timer = new Timer(10, this);
+        timer.start();
         this.victims = victims;
         enclosingFrame = frame;
         try {
             goomba = ImageIO.read(new File("src/Assets/skill_icons/Crosshair.png"));
+            background = ImageIO.read(new File("src/Assets/action_background.jpg"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        textField = new JTextField(10);
-        submitButton = new JButton("Submit");
-        clearButton = new JButton("Clear");
-        add(textField);  // textField doesn't need a listener since nothing needs to happen when we type in text
+        submitButton = new JButton("Next");
         add(submitButton);
-        add(clearButton);
         submitButton.addActionListener(this);
-        clearButton.addActionListener(this);
     }
 
 
@@ -71,33 +65,50 @@ public class WelcomePanel extends JPanel implements ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setFont(new Font("Arial", Font.BOLD, 16));
+        g.drawImage(background,0,0,null);
+        g.setFont(new Font("Arial", Font.BOLD, 40));
         g.setColor(Color.RED);
-        g.drawString(attacker.getCurrentSkill().getName(), 50, 30);
+        g.drawString(attacker.getCurrentSkill().getName(), 400, 50);
+        int dmg  = (int) (attacker.getAttack() * attacker.getCurrentSkill().getDamageMultiplier());
+
+        if (attacker.getIdleAnim().getCurrentFrame() == 0){
+            attacker.attackAnimation();
+        }
+
         g.drawImage(attacker.getFrame(),300,300,null);
         if (victim != null){
             g.drawImage(victim.getFrame(),350,300,null);
+            g.setFont(new Font("Arial", Font.ITALIC, 25));
+            g.drawString(dmg + " Damage!",250,30);
         } else {
+            int aliveCount = 0;
             for (Player p: victims){
-                g.drawImage(p.getFrame(),p.getX(),p.getY(),null);
+                if (p.isAlive()){
+                    g.drawImage(p.getFrame(),p.getX(),p.getY(),null);
+                    aliveCount++;
+                }
             }
+            g.setFont(new Font("Arial", Font.ITALIC, 25));
+            g.drawString((dmg * aliveCount) + " Damage!",250,30);
         }
 
 
-        System.out.println("test");
 
+        //g.drawImage(goomba, 200, 100, null);
 
-        g.drawImage(goomba, 200, 100, null);
-
-        textField.setLocation(50, 50);
-        submitButton.setLocation(50, 100);
-        clearButton.setLocation(150, 100);
+        submitButton.setLocation(800, 500);
+        submitButton.setBackground(Color.red);
     }
 
     // ACTIONLISTENER INTERFACE METHODS
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() instanceof JButton) {
+            enclosingFrame.dispose();
+        }
         if (e.getSource() instanceof Timer) {
             repaint();
         }
     }
+
+
 }

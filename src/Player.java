@@ -88,6 +88,9 @@ public class Player {
         }
     }
 
+    public Animation getIdleAnim() {
+        return idleAnim;
+    }
 
     public Skill_Set getSkillSet(){ return skillSet;}
 

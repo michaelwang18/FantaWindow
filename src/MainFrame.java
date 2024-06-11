@@ -3,6 +3,8 @@ import java.awt.*;
 
 public class MainFrame implements Runnable{
 
+    private Thread thread;
+
     private Game panel;
 
     public MainFrame(String name){
@@ -19,7 +21,7 @@ public class MainFrame implements Runnable{
     //    frame.add(panel);
         frame.setVisible(true);
 
-        Thread thread = new Thread(this);
+        thread = new Thread(this);
         thread.start();
 
        // panel.start();
@@ -27,11 +29,18 @@ public class MainFrame implements Runnable{
 
     }
 
+    public Thread getThread() {
+        return thread;
+    }
 
     @Override
     public void run() {
       while (true){
           panel.repaint(); // finish later
       }
+    }
+
+    public void pause(int miliseconds) throws InterruptedException {
+        wait(miliseconds);
     }
 }
