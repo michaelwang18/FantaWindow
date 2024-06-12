@@ -87,6 +87,13 @@ public class Player {
             blocking = true;
         }
     }
+    public void heal(int i){
+        alive = true;
+        currentHealth += i;
+        if (currentHealth > health){
+            currentHealth = health;
+        }
+    }
 
     public Animation getIdleAnim() {
         return idleAnim;

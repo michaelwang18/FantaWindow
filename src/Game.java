@@ -35,6 +35,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
     private Player[] playerTeam;
     private BufferedImage uiBox;
     private Player[] enemies;
+    private BufferedImage blackScreen;
     private int rounds = 0;
 
     private boolean choosePhase;
@@ -56,6 +57,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
             BufferedImage s1c =  ImageIO.read(new File("src/Assets/skill_icons/sword_strike.png"));
             BufferedImage s2c = ImageIO.read(new File("src/Assets/skill_icons/sword_sweep.png"));
             BufferedImage s3c = ImageIO.read(new File("src/Assets/skill_icons/block.png"));
+            blackScreen = ImageIO.read(new File("src/Assets/black-screen.png"));
             crosshair =  ImageIO.read(new File("src/Assets/skill_icons/crosshair.png"));
             testIcon1 = new Skill_Set(new Skill("Sword Strike", "Quick Strike", 2, false, s1c),new Skill("Sword Sweep", "Aoe Skill", 1, true, s2c),new Skill("Block", "Protec", 0, false, s3c));
             testIcon2 = new Skill_Set(new Skill("Arrow Shot", "Shoots 1 target", 2,  false, s1c),new Skill("Arrow Volley", "Aoe Skill", 1,  true, s2c),new Skill("Block", "Protec", 0,  false, s3c));
@@ -232,14 +234,17 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
 
 
         if (!pAlive){
+                g.drawImage(blackScreen,0,0,null);
                 g.setColor(Color.RED);
-                g.setFont(new Font("Courier New", Font.BOLD, 100));
+                g.setFont(new Font("Courier New", Font.BOLD, 90));
                 g.drawString("YOU LOST!",200,300);
         }
         if (!eAlive){
+            g.drawImage(blackScreen,0,0,null);
             g.setColor(Color.RED);
-            g.setFont(new Font("Courier New", Font.BOLD, 100));
+            g.setFont(new Font("Courier New", Font.BOLD, 90));
             g.drawString("YOU WIN!",200,300);
+
         }
 
 
