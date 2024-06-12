@@ -92,6 +92,15 @@ public class Player {
         return idleAnim;
     }
 
+    public void exchange(Player player){
+        health = player.health;
+        attack = player.attack;
+        alive = true;
+        currentHealth = health;
+        idleAnim = player.idleAnim;
+
+    }
+
     public Skill_Set getSkillSet(){ return skillSet;}
 
     public int getX() {return x;}

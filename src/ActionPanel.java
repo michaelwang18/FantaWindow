@@ -124,6 +124,7 @@ public class ActionPanel extends JPanel implements ActionListener {
     // ACTIONLISTENER INTERFACE METHODS
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof JButton) {
+            attacker.getIdleAnim().setAtk(false);
             enclosingFrame.dispose();
         }
         if (e.getSource() instanceof Timer) {

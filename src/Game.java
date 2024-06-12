@@ -21,6 +21,11 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
     private Player testPlayer2;
     private Player testPlayer3;
 
+    private Enemy skeleton;
+    private Enemy mushroom;
+    private Enemy goblins;
+
+
     private Enemy testEnemy1;
     private Enemy testEnemy2;
     private Enemy testEnemy3;
@@ -29,6 +34,8 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
     private Enemy[] enemyTeam;
     private Player[] playerTeam;
     private BufferedImage uiBox;
+    private Player[] enemies;
+    private int rounds = 0;
 
     private boolean choosePhase;
 
@@ -67,6 +74,8 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
         BufferedImage[] rangerAttack = Utility.processAnimFrames("src/Assets/leaf_ranger/attack/2_atk_",12);
 
         BufferedImage[] skeletonIdle = Utility.processAnimFrames("src/Assets/skeleton/idle/idle_",4);
+        BufferedImage[] mushroomIdle = Utility.processAnimFrames("src/Assets/goblin/idle_",4);
+        BufferedImage[] goblinIdle = Utility.processAnimFrames("src/Assets/mushroom/idle_",4);
 
         testPlayer1 = new Player("Knight",15,2,fireKnightIdle,fireKnightAttack, 200, 175,66, testIcon1);
         testPlayer2 = new Player("Ranger",10,2,rangerIdle,rangerAttack, 120 , 275,66, testIcon2);
@@ -74,12 +83,19 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
         playerTeam =  new Player[3]; playerTeam[0] = testPlayer1; playerTeam[1] = testPlayer2; playerTeam[2] = testPlayer3;
         currentPlayer = testPlayer1;
 
-
+        enemies =  new Enemy[3]; enemies[0] = skeleton; enemies[1] = mushroom; enemies[2] = goblins;
+        skeleton = new Enemy("Skelly Boy",15,1,skeletonIdle,fireKnightRun,600,175,132);
+        mushroom = new Enemy("Shroomy",20,1,mushroomIdle,fireKnightRun,600,175,132);
+        goblins = new Enemy("Gobby Jr.",10,1,goblinIdle,fireKnightRun,600,175,132);
+        enemies =  new Enemy[3]; enemies[0] = skeleton; enemies[1] = mushroom; enemies[2] = goblins;
 
         testEnemy1 = new Enemy("Skelly Boy",10,1,skeletonIdle,fireKnightRun,600,175,132);
         testEnemy2 = new Enemy("Skelly Boy",10,1,skeletonIdle,fireKnightRun,720,275,132);
         testEnemy3 = new Enemy("Skelly Boy",10,1,skeletonIdle,fireKnightRun,600,375,132);
         enemyTeam =  new Enemy[3]; enemyTeam[0] = testEnemy1; enemyTeam[1] = testEnemy2; enemyTeam[2] = testEnemy3;
+        for (Player enemy: enemyTeam){
+            enemy.exchange(enemies[(int)(Math.random() * 3)]);
+        }
 
 
 
@@ -92,10 +108,13 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
         addMouseListener(this);
         setFocusable(true);
         requestFocusInWindow();
+        rounds++;
         //start();
 
 
     }
+
+
 
     @Override
     public void paintComponent(Graphics g){
@@ -117,24 +136,13 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
             g.drawString((currentPlayer.getCurrentSkill().getDamageMultiplier() * currentPlayer.getAttack()) + " (Single Target)", 400, 530);
         }
 
-
-
-
-
-
         g.setFont(new Font("Courier New", Font.BOLD, 40));
         g.setColor(Color.PINK);
-        g.drawString("Your Turn", 340, 40);
+        g.drawString("Round " + rounds, 340, 40);
 
         g.setFont(new Font("Courier New", Font.BOLD, 12));
         g.setColor(Color.BLUE);
         g.drawString("Selected", currentPlayer.getX(), currentPlayer.getY() - 2);
-
-
-
-
-
-
 
         boolean pAlive = false;
         boolean eAlive = false;
@@ -163,12 +171,6 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
             }
         }
 
-            g.setFont(new Font("Courier New", Font.BOLD, 40));
-            g.setColor(Color.PINK);
-            g.drawString("Your Turn", 340, 40);
-
-
-
 
         for (Enemy enemy: enemyTeam){
             if (enemy.isAlive()){
@@ -185,14 +187,14 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
 
         if (currentPlayer.getCurrentSkill().isAoe()){
             for (Enemy player: enemyTeam){
-                g.drawImage(crosshair,player.getX(),player.getY(),null);
+                g.drawImage(crosshair,player.getX()-10,player.getY()-10,null);
             }
 
         }
 
         else if (currentPlayer.getCurrentSkill().getDamageMultiplier() != 0){
             Player target = enemyTeam[currentPlayer.getCurrentSkill().getTarget()];
-            g.drawImage(crosshair,target.getX(), target.getY(), null);
+            g.drawImage(crosshair,target.getX()-10, target.getY()-10, null);
 
             }
 
@@ -288,7 +290,6 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
             if (currentPlayer != testPlayer1){
                 currentPlayer = testPlayer1;
             } else {
-                testPlayer1.attackAnimation();
                 testPlayer1.changeSkill();
             }
         }
@@ -297,7 +298,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
             if (currentPlayer != testPlayer2){
                 currentPlayer = testPlayer2;
             } else {
-                testPlayer2.attackAnimation();
+
                 testPlayer2.changeSkill();
                 }
             }
@@ -306,7 +307,6 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
             if (currentPlayer != testPlayer3){
                 currentPlayer = testPlayer3;
             } else {
-                testPlayer3.attackAnimation();
                 testPlayer3.changeSkill();
                 System.out.println(currentPlayer.getCurrentSkill().getName());
             }
@@ -324,10 +324,11 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
                 }
             }
             if (alive) {
-                for (Player player : playerTeam) {
+                for (int i = 2; i >= 0 ;i--){
+                    Player player = playerTeam[i];
                     if (player.isAlive()) {
                         Skill c = player.getCurrentSkill();
-                        JFrame frame = new JFrame("Welcome");
+                        JFrame frame = new JFrame(player.getName() + "'s Turn!");
                         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         frame.setSize(900, 600);
                         frame.setLocationRelativeTo(null);
@@ -370,7 +371,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
                         }
                     }
                 }
-
+                rounds++;
             } else {
                 nextWave();
             }
@@ -431,4 +432,5 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
         System.out.println("Mouse Clicked");
 
     }
+
 }

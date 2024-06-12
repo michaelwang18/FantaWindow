@@ -28,6 +28,10 @@ public class Animation implements ActionListener { //adapted from demo code
         return frames;
     }
 
+    public void setAtk(boolean atk) {
+        this.atk = atk;
+    }
+
     public BufferedImage getActiveFrame() {
         if (atk){
             if (currentFrame == atkframes.length - 1){
