@@ -44,7 +44,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
 
 
         try { //Process images into "BufferedImage" here
-            background = ImageIO.read(new File("src/Assets/grass_Background.png")); //add temp one
+            background = ImageIO.read(new File("src/Assets/backgrounds/bg1.png")); //add temp one
             uiBox = ImageIO.read(new File("src/Assets/uiBox.png")); //add temp one
             BufferedImage s1c =  ImageIO.read(new File("src/Assets/skill_icons/sword_strike.png"));
             BufferedImage s2c = ImageIO.read(new File("src/Assets/skill_icons/sword_sweep.png"));
@@ -248,7 +248,11 @@ public class Game extends JPanel implements KeyListener, MouseListener, ActionLi
     }
 
     public void nextWave(){
-
+        try {
+           background =  ImageIO.read(new File("src/Assets/backgrounds/bg" + ((int)(Math.random()*6)+1) + ".png"));
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+        }
         BufferedImage[] skeletonIdle = Utility.processAnimFrames("src/Assets/skeleton/idle/idle_",4);
         testEnemy1 = new Enemy("Skelly Boy",10,1,skeletonIdle,skeletonIdle,600,175,132);
         testEnemy2 = new Enemy("Skelly Boy",10,1,skeletonIdle,skeletonIdle,720,275,132);

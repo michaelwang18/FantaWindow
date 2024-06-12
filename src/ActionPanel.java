@@ -15,9 +15,12 @@ public class ActionPanel extends JPanel implements ActionListener {
     private JButton submitButton;
     private JButton clearButton;
     private JFrame enclosingFrame;
+    private BufferedImage currentBG;
+    private int timerCount;
 
-    private BufferedImage background;
-    private BufferedImage goomba;
+    private BufferedImage background1;
+    private BufferedImage background2;
+    private BufferedImage background3;
 
     private Player attacker;
     private Player victim;
@@ -27,20 +30,24 @@ public class ActionPanel extends JPanel implements ActionListener {
 
     public ActionPanel(JFrame frame, Player attack, Player victim) {
         attacker = attack;
-        timer = new Timer(10, this);
+        timer = new Timer(15, this);
         timer.start();
         this.victim = victim;
         enclosingFrame = frame;
         try {
-            goomba = ImageIO.read(new File("src/Assets/skill_icons/Crosshair.png"));
-            background = ImageIO.read(new File("src/Assets/action_background.jpg"));
+            background1 = ImageIO.read(new File("src/Assets/backgrounds/action_background1.jpg"));
+            background2 = ImageIO.read(new File("src/Assets/backgrounds/action_background2.jpg"));
+            background3 = ImageIO.read(new File("src/Assets/backgrounds/action_background3.jpg"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            System.out.println("ACTION PANEL");
         }
 
         submitButton = new JButton("Next");
         add(submitButton);
         submitButton.addActionListener(this);
+        currentBG = background1;
+        timerCount = 0;
     }
 
     public ActionPanel(JFrame frame, Player attack, Player[] victims) {
@@ -50,14 +57,18 @@ public class ActionPanel extends JPanel implements ActionListener {
         this.victims = victims;
         enclosingFrame = frame;
         try {
-            goomba = ImageIO.read(new File("src/Assets/skill_icons/Crosshair.png"));
-            background = ImageIO.read(new File("src/Assets/action_background.jpg"));
+            background1 = ImageIO.read(new File("src/Assets/backgrounds/action_background1.jpg"));
+            background2 = ImageIO.read(new File("src/Assets/backgrounds/action_background2.jpg"));
+            background3 = ImageIO.read(new File("src/Assets/backgrounds/action_background3.jpg"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            System.out.println("ACTION PANEL");
         }
         submitButton = new JButton("Next");
         add(submitButton);
         submitButton.addActionListener(this);
+        currentBG = background1;
+        timerCount = 0;
     }
 
 
@@ -65,7 +76,17 @@ public class ActionPanel extends JPanel implements ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(background,0,0,null);
+        if (timerCount == 0){
+            currentBG = background1;
+        }
+        if (timerCount == 5){
+            currentBG = background2;
+        }
+        if (timerCount == 10){
+            currentBG = background3;
+            timerCount = -1;
+        }
+        g.drawImage(currentBG,0,0,null);
         g.setFont(new Font("Arial", Font.BOLD, 40));
         g.setColor(Color.RED);
         g.drawString(attacker.getCurrentSkill().getName(), 400, 50);
@@ -79,7 +100,7 @@ public class ActionPanel extends JPanel implements ActionListener {
         if (victim != null){
             g.drawImage(victim.getFrame(),350,300,null);
             g.setFont(new Font("Arial", Font.ITALIC, 25));
-            g.drawString(dmg + " Damage!",250,30);
+            g.drawString(dmg + " Damage!",10,70);
         } else {
             int aliveCount = 0;
             for (Player p: victims){
@@ -89,7 +110,7 @@ public class ActionPanel extends JPanel implements ActionListener {
                 }
             }
             g.setFont(new Font("Arial", Font.ITALIC, 25));
-            g.drawString((dmg * aliveCount) + " Damage!",250,30);
+            g.drawString((dmg * aliveCount) + " Damage!",10,70);
         }
 
 
@@ -106,6 +127,7 @@ public class ActionPanel extends JPanel implements ActionListener {
             enclosingFrame.dispose();
         }
         if (e.getSource() instanceof Timer) {
+            timerCount++;
             repaint();
         }
     }
